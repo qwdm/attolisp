@@ -10,11 +10,12 @@ Now supports:
 * recursion
 * one-line expression repl
 
-=== Usage ===
+######Usage
 
 $ python repl.py
 
-```
+
+```scheme
 >> (define (len l) (if (eq (cdr l) None) 1 (plus 1 (len (cdr l)))))        
 defined: len
 >> (len (list 3 4 5))
