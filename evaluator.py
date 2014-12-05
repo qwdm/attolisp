@@ -21,6 +21,10 @@ def plus(a, b): return "(%s + %s)" % (a, b)
 FUNCTIONS = {
     "plus" : (lambda x, y: x + y),
     "mult" : (lambda x, y: x * y),
+    "cond" : (lambda test, t_clause, f_clause: t_clause if test else f_clause),
+    "gt"   : (lambda x, y: x > y),
+    "eq"   : (lambda x, y: x == y),
+    "neg"  : (lambda x: -x),
 }
 
 
@@ -50,14 +54,25 @@ def define(name, params, expr):
 
 
 def calculate(expr):
-    if not isinstance(expr, list): # single
+    # atom
+    if not isinstance(expr, list):
         return expr
+    # special forms: define
     elif expr[0] == 'define':
         name = expr[1][0]
         params = expr[1][1:]
         expr = expr[2]
         define(name, params, expr)
         return "defined: %s" % name 
+    # special forms: require
+    elif expr[0] == 'require':
+        print expr
+        with open(expr[1]) as source:
+            for line in source:
+                calculate(line.rstrip())
+                print line
+                print FUNCTIONS
+    # common expression
     else:
         return eval(expand(expr))
 
