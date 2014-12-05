@@ -1,18 +1,18 @@
 ##################################################33
-def mult(a, b): return a * b
-
-def mkfun(name):
-    return lambda lst: "(%s(%s))" % (name, ",".join(map(str,lst)))
-
-
-a = mkfun("mult")
-foo = a([2, 3])
-print eval(foo)
-
-
-foo = a(['x', 'y'])
-x, y = 4, 8
-print eval(foo)
+# conservate this for the better future
+#def mult(a, b): return a * b
+#
+#def mkfun(name):
+#    return lambda lst: "(%s(%s))" % (name, ",".join(map(str,lst)))
+#
+#a = mkfun("mult")
+#foo = a([2, 3])
+#print eval(foo)
+#
+#
+#foo = a(['x', 'y'])
+#x, y = 4, 8
+#print eval(foo)
 
 ####################################################
 
@@ -33,7 +33,7 @@ def expand(expr):
         return "(FUNCTIONS['%s'](%s))" % (expand(op), ",".join(map(expand, params)))
 
 
-print expand(['func', ['square','x'], 'y'])
+#print expand(['func', ['square','x'], 'y'])
 
 
 def define(name, params, expr):
@@ -44,9 +44,9 @@ def define(name, params, expr):
     print string
     FUNCTIONS[name] = eval(string)
 
-define("square", ["x"], ["mult", "x", "x"])
-
-print FUNCTIONS['square'](5)
+#define("square", ["x"], ["mult", "x", "x"])
+#
+#print FUNCTIONS['square'](5)
 
 
 def calculate(expr):
@@ -61,37 +61,20 @@ def calculate(expr):
     else:
         return eval(expand(expr))
 
-expressions = [
-    ["mult", "4", "6"],
-    ["define", ["square", "x"], ["mult", "x", "x"]],
-    ["square", "6"],
-    ["define", ["sum_squares", "x", "y"], ["plus", ["square", "x"], ["square", "y"]]],
-    ["sum_squares", "3", "4"],
-    ["define", ["pi"], ["3.14"]],
-    ["define", ["circle_area", "r"], ["mult", ["square", "r"], ["pi"]]],
-    ["circle_area", "4"],
-]
 
-print dir()
-for expr in expressions:
-    print calculate(expr)
+if __name__ == '__main__':
+    # simple test
+    expressions = [
+        ["mult", "4", "6"],
+        ["define", ["square", "x"], ["mult", "x", "x"]],
+        ["square", "6"],
+        ["define", ["sum_squares", "x", "y"], ["plus", ["square", "x"], ["square", "y"]]],
+        ["sum_squares", "3", "4"],
+        ["define", ["pi"], ["3.14"]],
+        ["define", ["circle_area", "r"], ["mult", ["square", "r"], ["pi"]]],
+        ["circle_area", "4"],
+    ]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
-
+    print dir()
+    for expr in expressions:
+        print calculate(expr)
