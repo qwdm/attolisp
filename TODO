@@ -1,0 +1,8 @@
+##### TODO list
+
+* read & execute source files
+* multiline (repl, source)
+* stdio functions
+* test suite (scm functional, python unit)
+* pretty format project directory
+* string datatype support!
