@@ -17,19 +17,19 @@ def _list(*args):
 # global definitions scope
 FUNCTIONS = {
     # arithmetic
-    "plus" : (lambda x, y: x + y),
-    "mult" : (lambda x, y: x * y),
-    "minus": (lambda x, y: x - y),
-    "div"  : (lambda x, y: x / y), # py3 need another approach
-    "rem"  : (lambda x, y: x % y),
-    "neg"  : (lambda x: -x),
+    "__plus__" : (lambda x, y: x + y),
+    "__mult__" : (lambda x, y: x * y),
+    "__minus__": (lambda x, y: x - y),
+    "__div__"  : (lambda x, y: x / y), # py3 need another approach
+    "__rem__"  : (lambda x, y: x % y),
+    "__neg__"  : (lambda x: -x),
 
     # logical
-    "eq"   : (lambda x, y: x == y),
-    "gt"   : (lambda x, y: x > y),
-    "lt"   : (lambda x, y: x < y),
-    "ge"   : (lambda x, y: x >= y),
-    "le"   : (lambda x, y: x <= y),
+    "__eq__"   : (lambda x, y: x == y),
+    "__gt__"   : (lambda x, y: x > y),
+    "__lt__"   : (lambda x, y: x < y),
+    "__ge__"   : (lambda x, y: x >= y),
+    "__le__"   : (lambda x, y: x <= y),
 
     # pairs
     "cons" : (lambda x, y: (x, y)),
@@ -95,21 +95,3 @@ def calculate(expr):
     # common expression
     else:
         return eval(expand(expr))
-
-
-if __name__ == '__main__':
-    # simple test
-    expressions = [
-        ["mult", "4", "6"],
-        ["define", ["square", "x"], ["mult", "x", "x"]],
-        ["square", "6"],
-        ["define", ["sum_squares", "x", "y"], ["plus", ["square", "x"], ["square", "y"]]],
-        ["sum_squares", "3", "4"],
-        ["define", ["pi"], ["3.14"]],
-        ["define", ["circle_area", "r"], ["mult", ["square", "r"], ["pi"]]],
-        ["circle_area", "4"],
-    ]
-
-    print dir()
-    for expr in expressions:
-        print calculate(expr)
