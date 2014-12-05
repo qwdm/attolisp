@@ -1,20 +1,7 @@
-##################################################33
-# conservate this for the better future
-#def mult(a, b): return a * b
-#
-#def mkfun(name):
-#    return lambda lst: "(%s(%s))" % (name, ",".join(map(str,lst)))
-#
-#a = mkfun("mult")
-#foo = a([2, 3])
-#print eval(foo)
-#
-#
-#foo = a(['x', 'y'])
-#x, y = 4, 8
-#print eval(foo)
+import lexer
 
-####################################################
+
+# test purposes
 def log_args(funcname):
     import sys
     def decorator(func):
@@ -26,18 +13,11 @@ def log_args(funcname):
         return wrapper
     return decorator
             
-            
 
-
-
-import lexer
-
-def plus(a, b): return "(%s + %s)" % (a, b)
-
+# global definitions scope
 FUNCTIONS = {
     "plus" : (lambda x, y: x + y),
     "mult" : (lambda x, y: x * y),
-#    "cond" : (lambda test, t_clause, f_clause: t_clause if test else f_clause),
     "gt"   : (lambda x, y: x > y),
     "eq"   : (lambda x, y: x == y),
     "neg"  : (lambda x: -x),
@@ -46,17 +26,21 @@ FUNCTIONS = {
 
 
 def expand(expr):
+    """ expand expression with different rules for special """
+    # atom
     if not isinstance(expr, list):
         return expr
-    elif expr[0] == 'cond':
+    # conditional if
+    elif expr[0] == 'if':
         return "(%s if %s else %s)" % (expand(expr[2]), expand(expr[1]), expand(expr[3]))
+    # logical and, or
+    elif expr[0] == 'and' or expr[0] == 'or':
+        return "(%s)" % (" %s " % expr[0]).join([expand(e) for e in expr[1:]])
     else:
         op = expr[0]
         params = expr[1:]
         return "(FUNCTIONS['%s'](%s))" % (expand(op), ",".join(map(expand, params)))
 
-
-#print expand(['func', ['square','x'], 'y'])
 
 
 #@log_args('define')
@@ -65,12 +49,7 @@ def define(name, params, expr):
         string = 'lambda : %s' % expr[0]
     else:
         string = 'lambda %s: %s' % (','.join(params), expand(expr))
-#    print string
     FUNCTIONS[name] = eval(string)
-
-#define("square", ["x"], ["mult", "x", "x"])
-#
-#print FUNCTIONS['square'](5)
 
 
 #@log_args('calculate')
@@ -88,11 +67,10 @@ def calculate(expr):
         return "defined: %s" % name 
     # special forms: require
     elif expr[0] == 'require':
-        print expr
         with open(expr[1]) as source:
             for line in source:
                 if len(line) > 2:
-                    calculate(eval(lexer.makelist(line.rstrip())))
+                    calculate(lexer.makelist(line.rstrip()))
     # common expression
     else:
         return eval(expand(expr))
