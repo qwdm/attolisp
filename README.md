@@ -19,5 +19,5 @@ $ python repl.py
 >> (define (len l) (if (eq (cdr l) None) 1 (plus 1 (len (cdr l)))))        
 defined: len
 >> (len (list 3 4 5))
-5
+3
 ```
