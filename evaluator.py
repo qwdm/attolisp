@@ -1,35 +1,56 @@
 import lexer
+from tests import log_args
 
 
-# test purposes
-def log_args(funcname):
-    import sys
-    def decorator(func):
-        def wrapper(*args, **kwargs):
-            print >> sys.stderr, "%s args & kwargs: " % funcname
-            if args: print >> sys.stderr, args
-            if kwargs: print >> sys.stderr, kwargs 
-            return func(*args, **kwargs)
-        return wrapper
-    return decorator
             
+#### BUILT-INS ####################################################
+
+def _list(*args):
+    """ builtin list function """
+    if len(args) == 0:
+        raise ValueError
+    elif len(args) == 1:
+        return (args[0], None)
+    else:
+        return (args[0], _list(*args[1:]))
 
 # global definitions scope
 FUNCTIONS = {
+    # arithmetic
     "plus" : (lambda x, y: x + y),
     "mult" : (lambda x, y: x * y),
-    "gt"   : (lambda x, y: x > y),
-    "eq"   : (lambda x, y: x == y),
-    "neg"  : (lambda x: -x),
     "minus": (lambda x, y: x - y),
+    "div"  : (lambda x, y: x / y), # py3 need another approach
+    "rem"  : (lambda x, y: x % y),
+    "neg"  : (lambda x: -x),
+
+    # logical
+    "eq"   : (lambda x, y: x == y),
+    "gt"   : (lambda x, y: x > y),
+    "lt"   : (lambda x, y: x < y),
+    "ge"   : (lambda x, y: x >= y),
+    "le"   : (lambda x, y: x <= y),
+
+    # pairs
+    "cons" : (lambda x, y: (x, y)),
+    "car"  : (lambda x : x[0]),
+    "cdr"  : (lambda x : x[1]),
+    "list" : _list,
 }
 
+
+
+##############################################################
 
 def expand(expr):
     """ expand expression with different rules for special """
     # atom
     if not isinstance(expr, list):
         return expr
+#        if expr[0].isdigit(): # number
+#            return expr
+#        elif expr[0].isalpha(): # itendifier
+#            return "(FUNCTIONS['%s']())" % expr
     # conditional if
     elif expr[0] == 'if':
         return "(%s if %s else %s)" % (expand(expr[2]), expand(expr[1]), expand(expr[3]))
