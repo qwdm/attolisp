@@ -6,21 +6,23 @@ BIGNUM = 1000
 def makelist(string):
     """ make python list from input string """ 
     # change ariphmetic operators to builtin words
-    pre = r'\(\s*' # only if open paren. -> only if operator
-    presub = r'('
+#    pre = r'\(\s*' # only if open paren. -> only if operator
+#    presub = r'('
+    post = r'([^\w])'
+    postsub = r'\1'
     ariphmetic_subs = [
-            (r'\+', '__plus__'),
-            (r'-', '__minus__'),
-            (r'\*', '__mult__'),
-            (r'/', '__div__'),
-            (r'%', '__rem__'),
-            (r'=', '__eq__'),
-            (r'> ', '__gt__'),
-            (r'< ', '__lt__'),
-            (r'>=', '__ge__'),
-            (r'<=', '__le__'),
+            (r'\+', '_add'),
+            (r'-', '_sub'),
+            (r'\*', '_mul'),
+            (r'/', '_div'),
+            (r'%', '_rem'),
+            (r'>=', '_ge'),
+            (r'<=', '_le'),
+            (r'=', '_eq'),
+            (r'>', '_gt'),
+            (r'<', '_lt'),
     ]
-    ariphmetic_subs = [(pre+s[0], presub+s[1]) for s in ariphmetic_subs]
+    ariphmetic_subs = [(s[0]+post, s[1]+postsub) for s in ariphmetic_subs]
 
     # parens -> brackets
     python_syntax_sub = [
@@ -29,7 +31,11 @@ def makelist(string):
     ]
 
     # identifiers and put into " "
-    python_syntax_sub += [(r'(-*[\w.]+)',r'"\1"')]
+    python_syntax_sub += [(r'([-\w.?]+)',r'"\1"')]
+
+    # ? -> _qqq and - -> ___
+    python_syntax_sub += [(r'\?', r'_qqq'),
+                          (r'(\w)-(\w)', r'\1___\2')]
 
     # commas between elements in lists
     python_syntax_sub += [(r'(\s+)',r', ')]
@@ -40,4 +46,5 @@ def makelist(string):
         string = re.sub(s[0], s[1], string, BIGNUM)
 
     # return evaluated as python list
+    print string
     return eval(string)

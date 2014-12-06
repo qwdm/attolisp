@@ -1,5 +1,6 @@
 import sys
 import evaluator
+#from evaluator import Scope
 
 def log_args(funcname):
     def decorator(func):
@@ -26,3 +27,17 @@ def simple_calc_test():
 
     for expr in expressions:
         print evaluator.calculate(expr)
+
+def expand_test():
+    exprs = [
+        "5",
+        ["_plus", "5", "6"],
+        ["_mult", ["_plus", "1", "2"], ["_plus", "3", "4"]],
+    ]
+    for e in exprs:
+        print evaluator.expand(e)
+
+if __name__ == "__main__":
+#    print Scope.__dict__
+    expand_test()
+

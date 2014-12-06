@@ -1,5 +1,6 @@
 from lexer import makelist
 from evaluator import calculate
+#from NEW import calculate
 
 if __name__ == "__main__":
     while True:
