@@ -1,7 +1,7 @@
 ##### TODO list
 
-* read & execute source files
-* multiline (repl, source)
+* read & execute source files outside repl
+* multiline repl
 * stdio functions
 * test suite (scm functional, python unit)
 * pretty format project directory
