@@ -59,10 +59,7 @@ def define(name, params, expr):
         expr = deep_substitute(p, i, expr)
     
     Scope.__dict__[name] = _(lambda *A: eval(expand(expr)))
-    #return expr
-        
 
-#    Scope.__dict__[name] = _(lambda *A: eval(expand(expr)))
 
 #@log_args('expand')
 def expand(expr):
@@ -83,9 +80,12 @@ def expand(expr):
 
 
 def calculate(expr):
+
+    # atom
     if not isinstance(expr, list):
         return eval(expand(expr))
 
+    # define function
     elif expr[0] == 'define':
         name = expr[1][0]
         params = expr[1][1:]
@@ -93,40 +93,12 @@ def calculate(expr):
         define(name, params, expr)
         return "defined: %s" % name
     
+    # require module
     elif expr[0] == 'require':
         with open(expr[1]) as source:
-            for line in source:
-                if len(line) > 2:
-                    calculate(lexer.makelist(line.rstrip()))
+            for expr in lexer.splitfile(source):
+                calculate(lexer.makelist(expr))
 
+    # common expression
     else:
         return eval(expand(expr))
-
-
-
-
-
-##print deep_substitute('x', '0', ['+', ['*', 'x', 'y'], ['*', 'x', 'z']])
-#define('foo', ['x', 'y'], ['_add', ['_mul', 'x', 'x'], ['_mul', 'y', 'y']])
-##print Scope.__dict__
-#print Scope.foo(3, 4)
-#print eval("Scope.foo(3, 4)")
-#
-#print expand(['if', ['_gt', 'x', 'y'], 'x', 'y'])
-#
-#define('max', ['x', 'y'], ['if', ['_gt', 'x', 'y'], 'x', 'y'])
-#define('inc', ['n'], ['_add', 'n', '1'])
-#define('fac', ['n'], ['if', ['_eq', 'n', '0'], 
-#                            '1', 
-#                            ['_mul', 'n', 
-#                                     ['fac', ['_sub', 'n', '1']]]])
-#define('foo', ['f', 'x'], ['f', ['f', 'x']])
-#
-#
-#print Scope.max(3,4)
-#print Scope.inc(17)
-#print Scope.fac(5)
-#print Scope.foo(Scope.inc, 4)
-#print eval(expand(['foo', 'inc', '4']))
-
-

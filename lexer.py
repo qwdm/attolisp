@@ -6,8 +6,6 @@ BIGNUM = 1000
 def makelist(string):
     """ make python list from input string """ 
     # change ariphmetic operators to builtin words
-#    pre = r'\(\s*' # only if open paren. -> only if operator
-#    presub = r'('
     post = r'([^\w])'
     postsub = r'\1'
     ariphmetic_subs = [
@@ -48,3 +46,20 @@ def makelist(string):
     # return evaluated as python list
     print string
     return eval(string)
+
+
+def splitfile(fileobj):
+    lines = fileobj.readlines()
+    # take off comments
+    lines = [line.rstrip() for line in lines if not line.startswith(';') or len(line) < 2]
+    strings = []
+    s = ''
+    for line in lines:
+        if line.startswith('('):
+            strings.append(s)
+            s = line
+        else:
+            s += line
+    strings.append(s)  
+    strings = strings[1:]
+    return strings
