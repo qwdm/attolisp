@@ -95,9 +95,11 @@ def calculate(expr):
     
     # require module
     elif expr[0] == 'require':
+        defined = []
         with open(expr[1]) as source:
             for expr in lexer.splitfile(source):
-                calculate(lexer.makelist(expr))
+                defined.append(calculate(lexer.makelist(expr)))
+        return '\n'.join(defined)
 
     # common expression
     else:

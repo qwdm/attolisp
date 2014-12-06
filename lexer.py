@@ -44,7 +44,7 @@ def makelist(string):
         string = re.sub(s[0], s[1], string, BIGNUM)
 
     # return evaluated as python list
-    print string
+    # print string
     return eval(string)
 
 
