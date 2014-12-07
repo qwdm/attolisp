@@ -37,9 +37,25 @@ def expand_test():
     for e in exprs:
         print evaluator.expand(e)
 
+def scope_test():
+
+    global Scope
+    Scope = evaluator.Scope
+
+    _ = evaluator._
+
+    Scope.inc = _(lambda *A: eval("Scope._add(1, A[0])"))
+    print Scope.inc(5)
+
+    Scope.fact = _(lambda *A: eval("1 if Scope._eq(A[0], 0) else Scope._mul(A[0], Scope.fact(Scope._sub(A[0], 1)))"))
+    print Scope.fact(5)
+
+
 if __name__ == "__main__":
 #    print Scope.__dict__
-    expand_test()
+#    expand_test()
+    scope_test()
+
 
 # TODO
 ##print deep_substitute('x', '0', ['+', ['*', 'x', 'y'], ['*', 'x', 'z']])
