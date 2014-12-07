@@ -18,9 +18,16 @@ $ python repl.py
 
 
 ```scheme
->> (require prelude.scm)
+>> (> 4 5)
+False
+>> (+ 10 3)
+13
+>> (+ (upcs 'pussy') (upcs 'cat'))
+PUSSYCAT
+>> (require prelude.scm)  ; import definitions from module
 defined: abs
-defined: .....
+defined: inc
+....
 defined: empty_qqq  ; empty? mangled into empty_qqq
 >> (abs -5)
 5
@@ -30,6 +37,10 @@ defined: length
 3
 >> (map inc (list 1 2 3 4))
 (2, (3, (4, (5, None))))   ; no better representation supported for now
+>> (define (fact n) (reduce * 1 (range 1 n)))
+defined: fact
+>> (fact 5)
+120
 ```
 
 also see examples in prelude.scm
