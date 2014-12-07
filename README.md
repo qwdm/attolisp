@@ -36,7 +36,7 @@ defined: length
 >> (length (list 6 4 5))
 3
 >> (map inc (list 1 2 3 4))
-(2, (3, (4, (5, None))))   ; no better representation supported for now
+(2 3 4 5)
 >> (define (fact n) (reduce * 1 (range 1 n)))
 defined: fact
 >> (fact 5)
