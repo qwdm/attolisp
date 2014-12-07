@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from lexer import makelist
 from evaluator import calculate
 
