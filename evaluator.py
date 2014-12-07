@@ -89,7 +89,7 @@ def expand(expr):
 
     # special form if
     elif expr[0] == 'if':
-        return "%s if %s else %s" % (expand(expr[2]), expand(expr[1]), expand(expr[3]))
+        return "(%s if %s else %s)" % (expand(expr[2]), expand(expr[1]), expand(expr[3]))
 
     # special form and, or
     elif expr[0] == 'and' or expr[0] == 'or':
@@ -97,7 +97,7 @@ def expand(expr):
 
     # common call function form
     else:
-        return "%s(%s)" % (expand(expr[0]), ', '.join(map(expand, expr[1:]))) 
+        return "(%s)(%s)" % (expand(expr[0]), ', '.join(map(expand, expr[1:])))
 
 
 def calculate(expr):
